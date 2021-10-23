@@ -1,3 +1,5 @@
+{ Subprogramas a Implementar }
+
 {
 Devuelve en t un Tablero para el cual todas sus Casillas:
   * Están ocultas
