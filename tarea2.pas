@@ -7,14 +7,32 @@ Devuelve en t un Tablero para el cual todas sus Casillas:
   * No tienen minas alrededor
 }
 procedure IniciarTableroVacio (var t : Tablero);
+begin
+//posible for 
+var i : integer;
 
+FOR i := 1 TO t DO
+    BEGIN
+        i.oculto := true;
+        i.tipo := Libre(0);
+    END;
+end;
 
 {
 Para toda Casilla c del Tablero que es una Mina, c deja de estar oculta
 }
 procedure DesocultarMinas (var t : Tablero);
-
-
+begin
+//posible for 
+var i : integer;
+FOR i := 1 TO t DO
+    BEGIN
+        if (i.tipo = Mina) then
+      DesocultarTablero(t)
+        i.oculto := true;
+        i.tipo := Libre(0);
+    END;
+end;
 {
 Devuelve true si tanto la fila f como la columna c son válidas,
 es decir corresponden a una casilla del tablero.
