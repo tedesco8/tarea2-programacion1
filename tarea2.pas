@@ -7,31 +7,34 @@ Devuelve en t un Tablero para el cual todas sus Casillas:
   * No tienen minas alrededor
 }
 procedure IniciarTableroVacio (var t : Tablero);
+//Precondicion: arreglo bidimensional
+var i, j : integer;
 begin
-//posible for 
-var i : integer;
-
-FOR i := 1 TO t DO
-    BEGIN
-        i.oculto := true;
-        i.tipo := Libre(0);
-    END;
+  for i := 1 to CANT_FIL do
+      begin
+        for j := 1 to CANT_COL do
+          begin
+            j.oculto := true;
+            j.tipo := Libre(0);
+            j := + 1
+          end;
+      end;
 end;
 
 {
 Para toda Casilla c del Tablero que es una Mina, c deja de estar oculta
 }
 procedure DesocultarMinas (var t : Tablero);
+var i, j : integer;
 begin
-//posible for 
-var i : integer;
-FOR i := 1 TO t DO
-    BEGIN
-        if (i.tipo = Mina) then
-      DesocultarTablero(t)
-        i.oculto := true;
-        i.tipo := Libre(0);
-    END;
+  for i := 1 to CANT_FIL do
+      begin
+        for j := 1 to CANT_COL do
+          begin
+            if j.tipo = Mina then j.oculto := true;
+            j := + 1
+          end;
+      end;
 end;
 {
 Devuelve true si tanto la fila f como la columna c son válidas,
@@ -39,7 +42,21 @@ es decir corresponden a una casilla del tablero.
 De lo contrario devuelve false.
 }
 function EsPosicionValida (f, c : integer) : boolean;
-
+var retorno : boolean;
+var i, j : integer;
+begin
+  for i := 1 to CANT_FIL do
+      begin
+        for j := 1 to CANT_COL do
+          begin
+            if (i <> f) and (j <> c) then
+              begin
+                i := i + 1;
+                j := j + 1
+              end;
+          end;
+      end;
+end;
 
 {
 Agrega minas al Tablero t en cada una de las casillas c correspondientes a
