@@ -14,10 +14,11 @@ begin
       begin
         for j := 1 to CANT_COL do
           begin
-            j.oculto := true;
-            j.tipo := Libre(0);
+            t[i,j].oculto := true;
+            t[i,j].tipo := Libre(0);
             j := + 1
           end;
+          i := i + 1;
       end;
 end;
 
@@ -31,9 +32,10 @@ begin
       begin
         for j := 1 to CANT_COL do
           begin
-            if j.tipo = Mina then j.oculto := true;
+            if t[i,j].tipo = Mina then t[i,j].oculto := false;
             j := + 1
           end;
+        i := i + 1;
       end;
 end;
 {
@@ -42,20 +44,22 @@ es decir corresponden a una casilla del tablero.
 De lo contrario devuelve false.
 }
 function EsPosicionValida (f, c : integer) : boolean;
-var retorno : boolean;
+var isValidColum, isValidField : boolean;
 var i, j : integer;
 begin
-  for i := 1 to CANT_FIL do
-      begin
-        for j := 1 to CANT_COL do
-          begin
-            if (i <> f) and (j <> c) then
-              begin
-                i := i + 1;
-                j := j + 1
-              end;
-          end;
-      end;
+    for i := 1 to CANT_FIL do
+    begin
+      if(i <> c) then i := i + 1
+      else isValidField := true;
+    end;
+
+    for j := 1 to CANT_COL do
+    begin
+      if(j <> c) then j := j + 1
+      else isValidColum := true;
+    end;
+  end;
+  EsPosicionValida := isValidColum and isValidField;
 end;
 
 {
