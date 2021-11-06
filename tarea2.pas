@@ -11,14 +11,11 @@ procedure IniciarTableroVacio (var t : Tablero);
 var i, j : integer;
 begin
   for i := 1 to CANT_FIL do
+    for j := 1 to CANT_COL do
       begin
-        for j := 1 to CANT_COL do
-          begin
-            t[i,j].oculto := true;
-            t[i,j].tipo := Libre(0);
-            j := + 1
-          end;
-          i := i + 1;
+        t[i,j].oculto := true;
+        t[i,j].tipo := Libre;
+        t[i,j].minasAlrededor := 0;
       end;
 end;
 
@@ -29,14 +26,8 @@ procedure DesocultarMinas (var t : Tablero);
 var i, j : integer;
 begin
   for i := 1 to CANT_FIL do
-      begin
-        for j := 1 to CANT_COL do
-          begin
-            if t[i,j].tipo = Mina then t[i,j].oculto := false;
-            j := + 1
-          end;
-        i := i + 1;
-      end;
+    for j := 1 to CANT_COL do
+        if t[i,j].tipo = Mina then t[i,j].oculto := false;
 end;
 {
 Devuelve true si tanto la fila f como la columna c son válidas,
@@ -44,22 +35,8 @@ es decir corresponden a una casilla del tablero.
 De lo contrario devuelve false.
 }
 function EsPosicionValida (f, c : integer) : boolean;
-var isValidColum, isValidField : boolean;
-var i, j : integer;
 begin
-    for i := 1 to CANT_FIL do
-    begin
-      if(i <> c) then i := i + 1
-      else isValidField := true;
-    end;
-
-    for j := 1 to CANT_COL do
-    begin
-      if(j <> c) then j := j + 1
-      else isValidColum := true;
-    end;
-  end;
-  EsPosicionValida := isValidColum and isValidField;
+  EsPosicionValida := ((f > 0) and (f < CANT_FIL)) and ((c > 0) and (c < CANT_COL));
 end;
 
 {
