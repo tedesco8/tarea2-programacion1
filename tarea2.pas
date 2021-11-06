@@ -48,7 +48,15 @@ que queden libres. Este deberá contener la cantidad de casillas adyacentes que
 son minas.
 }
 procedure AgregarMinas (m : Minas; var t : Tablero);
-
+var i, j, k : integer;
+begin
+    i := 1;
+    for j := 1 to CANT_FIL do
+      for k := 1 to CANT_COL do
+        while (i <= Minas.tope) and (t.elems[j] = m.elems[i.fila] and t.elems[k] = m.elems[i.columna]) do
+          i:= i + 1;
+          t[i,j].tipo := Mina;
+end;
 
 {
 Si la fila f y columna c corresponden a una Casilla cas válida del Tablero t 
@@ -59,7 +67,7 @@ entonces se agrega la Posicion correspondiente a dicha casilla al final de la
 listaPos libres.
 }
 procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
-
+// f,c) podes ver la fila anterior (f-1) y la fila posterior (f+1), lo mismo con c-1 y c+1
 
 {
 Desoculta (ver procedimiento Desocultar) todas las casillas adyacentes a la
