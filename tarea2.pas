@@ -55,7 +55,7 @@ begin
       columna = m.elems[i].columna;
       if EsPosicionValida(fila, columna) then 
       begin
-          t.elems[fila, columna] := Minas;
+          t.tipo[fila, columna] := Mina;
           
       end;
 end;
