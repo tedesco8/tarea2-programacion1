@@ -48,14 +48,16 @@ que queden libres. Este deberá contener la cantidad de casillas adyacentes que
 son minas.
 }
 procedure AgregarMinas (m : Minas; var t : Tablero);
-var i, j, k : integer;
+var i, fila, columna : integer;
 begin
-    i := 1;
-    for j := 1 to CANT_FIL do
-      for k := 1 to CANT_COL do
-        while (i <= Minas.tope) and (t.elems[j] = m.elems[i.fila] and t.elems[k] = m.elems[i.columna]) do
-          i:= i + 1;
-          t[i,j].tipo := Mina;
+    for i := 1 to m.tope do
+      fila := m.elems[i].fila;
+      columna = m.elems[i].columna;
+      if EsPosicionValida(fila, columna) then 
+      begin
+          t.elems[fila, columna] := Minas;
+          
+      end;
 end;
 
 {
