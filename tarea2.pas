@@ -40,7 +40,7 @@ begin
 end;
 
 function adyasentesFn (f, c : integer; t : Tablero ) : AdyasentesType;
-var arrayList : array;
+var arrayList : AdyasentesType;
 var i, j : integer;
 begin
       for i := 1 to CANT_FIL do
