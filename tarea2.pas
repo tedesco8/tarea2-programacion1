@@ -39,6 +39,10 @@ begin
   EsPosicionValida := ((f > 0) and (f < CANT_FIL)) and ((c > 0) and (c < CANT_COL));
 end;
 
+{
+Procedimiento propio, modifica el tablero agregandole la cantidad de minas 
+alrededor de una casilla.
+}
 procedure AgregaMinasAlrededor (f, c : integer; var t : Tablero );
 var fila, columna : integer;
 begin
@@ -97,8 +101,14 @@ entonces se agrega la Posicion correspondiente a dicha casilla al final de la
 listaPos libres.
 }
 procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
-// f,c) podes ver la fila anterior (f-1) y la fila posterior (f+1), lo mismo con c-1 y c+1
-
+begin
+  if EsPosicionValida(f, c) and t[f,c].tipo == Libre then
+  begin
+    t[f,c].oculto := false;
+    if !(t[f,c].minasAlrededor > 0) then
+      //TODO: agregar f,c al final de la lista libres
+  end;
+end;
 {
 Desoculta (ver procedimiento Desocultar) todas las casillas adyacentes a la
 Casilla del Tablero t asociada a la fila f y la columna c.
