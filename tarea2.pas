@@ -39,6 +39,31 @@ begin
   EsPosicionValida := ((f > 0) and (f < CANT_FIL)) and ((c > 0) and (c < CANT_COL));
 end;
 
+function adyasentesFn (f, c : integer; t : Tablero ) : AdyasentesType;
+var arrayList : array;
+var i, j : integer;
+begin
+      for i := 1 to CANT_FIL do
+        for j := 1 to CANT_COL do
+          if (f = i) AND (c = j) then
+           EsPosicionValida(i + 1, j + 1)
+
+
+  // aduno := f;
+  // addos := f;
+  // adtres := c;
+  // adcuatro :=c;
+  // repeat
+  //   begin
+  //   aduno := f + 1;
+  //   addos := f - 1;
+  //   adtres := c + 1;
+  //   adcuatro := c - 1;
+  //   end;
+      
+  adyasentesFn := arrayList;
+end;
+
 {
 Agrega minas al Tablero t en cada una de las casillas c correspondientes a
 posiciones contenidas en m, es decir que dichas casillas cambien su tipo a Mina.
@@ -49,15 +74,20 @@ son minas.
 }
 procedure AgregarMinas (m : Minas; var t : Tablero);
 var i, fila, columna : integer;
+var adyasentesArr : AdyasentesType;
 begin
     for i := 1 to m.tope do
       fila := m.elems[i].fila;
       columna = m.elems[i].columna;
       if EsPosicionValida(fila, columna) then 
       begin
-          t.tipo[fila, columna] := Mina;
-          
+          t[fila, columna].tipo := Mina;
+          //TODO: programar funcion
+          adyasentesArr := adyasentesFn(fila, columna, t);
+          for i := 1 to adyasentesArr.tope do
+              t[adyasentesArr.elems[i].fila, adyasentesArr.elems[i].columna].minasAlrededor := 1;
       end;
+  end;
 end;
 
 {
