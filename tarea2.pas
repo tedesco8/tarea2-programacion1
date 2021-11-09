@@ -39,29 +39,30 @@ begin
   EsPosicionValida := ((f > 0) and (f < CANT_FIL)) and ((c > 0) and (c < CANT_COL));
 end;
 
-function adyasentesFn (f, c : integer; t : Tablero ) : AdyasentesType;
-var arrayList : AdyasentesType;
-var i, j : integer;
+procedure AgregaMinasAlrededor (f, c : integer; var t : Tablero );
+var fila, columna : integer;
 begin
-      for i := 1 to CANT_FIL do
-        for j := 1 to CANT_COL do
-          if (f = i) AND (c = j) then
-           EsPosicionValida(i + 1, j + 1)
-
-
-  // aduno := f;
-  // addos := f;
-  // adtres := c;
-  // adcuatro :=c;
-  // repeat
-  //   begin
-  //   aduno := f + 1;
-  //   addos := f - 1;
-  //   adtres := c + 1;
-  //   adcuatro := c - 1;
-  //   end;
-      
-  adyasentesFn := arrayList;
+  for fila := 1 to CANT_FIL do
+    for columna := 1 to CANT_COL do
+      if (f = fila) AND (c = columna) then
+      begin
+          if EsPosicionValida(fila + 1, columna) and t.tipo = Libre then
+                t[fila + 1, columna].minasAlrededor := +1;
+          if EsPosicionValida(fila - 1, columna) and t.tipo = Libre then
+                t[fila - 1, columna].minasAlrededor := +1;
+          if EsPosicionValida(fila, columna + 1) and t.tipo = Libre then
+                t[fila, columna + 1].minasAlrededor := +1;
+          if EsPosicionValida(fila, columna - 1) and t.tipo = Libre then
+                t[fila, columna - 1].minasAlrededor := +1;
+          if EsPosicionValida(fila + 1, columna + 1) and t.tipo = Libre then
+                t[fila + 1, columna + 1].minasAlrededor := +1;
+          if EsPosicionValida(fila - 1, columna + 1) and t.tipo = Libre then
+                t[fila - 1, columna + 1].minasAlrededor := +1;
+          if EsPosicionValida(fila - 1, columna - 1) and t.tipo = Libre then
+                t[fila - 1, columna - 1].minasAlrededor := +1;
+          if EsPosicionValida(fila + 1, columna - 1) and t.tipo = Libre then
+                t[fila + 1, columna - 1].minasAlrededor := +1
+      end;
 end;
 
 {
@@ -82,10 +83,7 @@ begin
       if EsPosicionValida(fila, columna) then 
       begin
           t[fila, columna].tipo := Mina;
-          //TODO: programar funcion
-          adyasentesArr := adyasentesFn(fila, columna, t);
-          for i := 1 to adyasentesArr.tope do
-              t[adyasentesArr.elems[i].fila, adyasentesArr.elems[i].columna].minasAlrededor := 1;
+          AgregaMinasAlrededor(fila, columna, t);
       end;
   end;
 end;
