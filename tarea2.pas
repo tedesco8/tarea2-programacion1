@@ -107,11 +107,13 @@ begin
   begin
     t[f,c].oculto := false;
     if t[f,c].minasAlrededor = 0 then
+    begin
       pos.fila := f;
       pos.columna := c;
       new(libres);
       libres^.pos := pos;
       libres^.sig := nil;
+    end;
   end;
 end;
 {
