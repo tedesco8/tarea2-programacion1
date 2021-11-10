@@ -133,3 +133,14 @@ Devuelve true si no existe ninguna Casilla en el Tablero t que cumpla con estar
 oculta y ser Libre. En otro caso devuelve false.
 }
 function EsTableroCompleto(t : Tablero) : boolean;
+var completo : boolean;
+begin
+  completo = true;
+  repeat
+    for i := 1 to CANT_FIL do
+      for j := 1 to CANT_COL do
+        if (t[i,j].oculto = true) and (t[i,j].tipo = Libre) then
+          completo = false;
+  until (completo = false) or (i = CANT_FIL and j = CANT_COL );
+  EsTableroCompleto := completo;
+end;
