@@ -101,20 +101,42 @@ entonces se agrega la Posicion correspondiente a dicha casilla al final de la
 listaPos libres.
 }
 procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
+var pos : Posicion;
 begin
   if EsPosicionValida(f, c) and (t[f,c].tipo = Libre) then
   begin
     t[f,c].oculto := false;
     if t[f,c].minasAlrededor = 0 then
-      //TODO: agregar f,c al final de la lista libres
+      pos.fila := f;
+      pos.columna := c;
+      new(libres);
+      libres^.pos := pos;
+      libres^.sig := nil;
   end;
 end;
 {
 Desoculta (ver procedimiento Desocultar) todas las casillas adyacentes a la
 Casilla del Tablero t asociada a la fila f y la columna c.
 }
-procedure DesocultarAdyacentes (f, c : integer; var t : Tablero;
-                                var libres : ListaPos);
+procedure DesocultarAdyacentes (f, c : integer; var t : Tablero; var libres : ListaPos);
+begin
+  if EsPosicionValida(f + 1, c) then
+          Desocultar(f + 1, c);
+  if EsPosicionValida(f - 1, c) then
+          Desocultar(f - 1, c);
+  if EsPosicionValida(f, c + 1) then
+        Desocultar(f, c + 1);
+  if EsPosicionValida(f, c - 1) then
+        Desocultar(f, c - 1);
+  if EsPosicionValida(f + 1, c + 1) then
+        Desocultar(f + 1, c + 1);
+  if EsPosicionValida(f - 1, c + 1) then
+        Desocultar(f - 1, c + 1);
+  if EsPosicionValida(f - 1, c - 1) then
+        Desocultar(f - 1, c - 1);
+  if EsPosicionValida(f + 1, c - 1) then
+        Desocultar(f + 1, c - 1);
+end;
 
 
 {
@@ -135,12 +157,12 @@ oculta y ser Libre. En otro caso devuelve false.
 function EsTableroCompleto(t : Tablero) : boolean;
 var completo : boolean;
 begin
-  completo = true;
+  completo := true;
   repeat
     for i := 1 to CANT_FIL do
       for j := 1 to CANT_COL do
         if (t[i,j].oculto = true) and (t[i,j].tipo = Libre) then
-          completo = false;
+          completo := false;
   until (completo = false) or (i = CANT_FIL and j = CANT_COL );
   EsTableroCompleto := completo;
 end;
