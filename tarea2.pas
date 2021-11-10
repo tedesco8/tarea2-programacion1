@@ -50,21 +50,21 @@ begin
     for columna := 1 to CANT_COL do
       if (f = fila) AND (c = columna) then
       begin
-          if EsPosicionValida(fila + 1, columna) and t.tipo = Libre then
+          if EsPosicionValida(fila + 1, columna) and (t.tipo = Libre) then
                 t[fila + 1, columna].minasAlrededor := +1;
-          if EsPosicionValida(fila - 1, columna) and t.tipo = Libre then
+          if EsPosicionValida(fila - 1, columna) and (t.tipo = Libre) then
                 t[fila - 1, columna].minasAlrededor := +1;
-          if EsPosicionValida(fila, columna + 1) and t.tipo = Libre then
+          if EsPosicionValida(fila, columna + 1) and (t.tipo = Libre) then
                 t[fila, columna + 1].minasAlrededor := +1;
-          if EsPosicionValida(fila, columna - 1) and t.tipo = Libre then
+          if EsPosicionValida(fila, columna - 1) and (t.tipo = Libre) then
                 t[fila, columna - 1].minasAlrededor := +1;
-          if EsPosicionValida(fila + 1, columna + 1) and t.tipo = Libre then
+          if EsPosicionValida(fila + 1, columna + 1) and (t.tipo = Libre) then
                 t[fila + 1, columna + 1].minasAlrededor := +1;
-          if EsPosicionValida(fila - 1, columna + 1) and t.tipo = Libre then
+          if EsPosicionValida(fila - 1, columna + 1) and (t.tipo = Libre) then
                 t[fila - 1, columna + 1].minasAlrededor := +1;
-          if EsPosicionValida(fila - 1, columna - 1) and t.tipo = Libre then
+          if EsPosicionValida(fila - 1, columna - 1) and (t.tipo = Libre) then
                 t[fila - 1, columna - 1].minasAlrededor := +1;
-          if EsPosicionValida(fila + 1, columna - 1) and t.tipo = Libre then
+          if EsPosicionValida(fila + 1, columna - 1) and (t.tipo = Libre) then
                 t[fila + 1, columna - 1].minasAlrededor := +1
       end;
 end;
@@ -102,10 +102,10 @@ listaPos libres.
 }
 procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
 begin
-  if EsPosicionValida(f, c) and t[f,c].tipo == Libre then
+  if EsPosicionValida(f, c) and (t[f,c].tipo = Libre) then
   begin
     t[f,c].oculto := false;
-    if !(t[f,c].minasAlrededor > 0) then
+    if t[f,c].minasAlrededor = 0 then
       //TODO: agregar f,c al final de la lista libres
   end;
 end;
