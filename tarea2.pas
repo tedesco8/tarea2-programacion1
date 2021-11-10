@@ -40,36 +40,6 @@ begin
 end;
 
 {
-Procedimiento propio, modifica el tablero agregandole la cantidad de minas 
-alrededor de una casilla.
-}
-procedure AgregaMinasAlrededor (f, c : integer; var t : Tablero );
-var fila, columna : integer;
-begin
-  for fila := 1 to CANT_FIL do
-    for columna := 1 to CANT_COL do
-      if (f = fila) AND (c = columna) then
-      begin
-          if EsPosicionValida(fila + 1, columna) and (t.tipo = Libre) then
-                t[fila + 1, columna].minasAlrededor := +1;
-          if EsPosicionValida(fila - 1, columna) and (t.tipo = Libre) then
-                t[fila - 1, columna].minasAlrededor := +1;
-          if EsPosicionValida(fila, columna + 1) and (t.tipo = Libre) then
-                t[fila, columna + 1].minasAlrededor := +1;
-          if EsPosicionValida(fila, columna - 1) and (t.tipo = Libre) then
-                t[fila, columna - 1].minasAlrededor := +1;
-          if EsPosicionValida(fila + 1, columna + 1) and (t.tipo = Libre) then
-                t[fila + 1, columna + 1].minasAlrededor := +1;
-          if EsPosicionValida(fila - 1, columna + 1) and (t.tipo = Libre) then
-                t[fila - 1, columna + 1].minasAlrededor := +1;
-          if EsPosicionValida(fila - 1, columna - 1) and (t.tipo = Libre) then
-                t[fila - 1, columna - 1].minasAlrededor := +1;
-          if EsPosicionValida(fila + 1, columna - 1) and (t.tipo = Libre) then
-                t[fila + 1, columna - 1].minasAlrededor := +1
-      end;
-end;
-
-{
 Agrega minas al Tablero t en cada una de las casillas c correspondientes a
 posiciones contenidas en m, es decir que dichas casillas cambien su tipo a Mina.
 
@@ -78,17 +48,17 @@ que queden libres. Este deberá contener la cantidad de casillas adyacentes que
 son minas.
 }
 procedure AgregarMinas (m : Minas; var t : Tablero);
-var i, fila, columna : integer;
+var i, fila, columna, j, k : integer;
 var adyasentesArr : AdyasentesType;
 begin
     for i := 1 to m.tope do
       fila := m.elems[i].fila;
       columna = m.elems[i].columna;
-      if EsPosicionValida(fila, columna) then 
-      begin
-          t[fila, columna].tipo := Mina;
-          AgregaMinasAlrededor(fila, columna, t);
-      end;
+      t[fila, columna].tipo := Mina;
+          for j := fila - 1 to fila + 1 do
+            for k := columna - 1 to columna + 1 do
+              if EsPosicionValida(j, k) and (t[j,k].tipo = Libre) then
+                t[j,k].minasAlrededor := t[j,k].minasAlrededor + 1;
   end;
 end;
 
@@ -110,9 +80,7 @@ begin
     begin
       pos.fila := f;
       pos.columna := c;
-      new(libres);
-      libres^.pos := pos;
-      libres^.sig := nil;
+      AgregarAlFinal(pos, libres);
     end;
   end;
 end;
@@ -121,23 +89,12 @@ Desoculta (ver procedimiento Desocultar) todas las casillas adyacentes a la
 Casilla del Tablero t asociada a la fila f y la columna c.
 }
 procedure DesocultarAdyacentes (f, c : integer; var t : Tablero; var libres : ListaPos);
+var j, k : integer;
 begin
-  if EsPosicionValida(f + 1, c) then
-          Desocultar(f + 1, c);
-  if EsPosicionValida(f - 1, c) then
-          Desocultar(f - 1, c);
-  if EsPosicionValida(f, c + 1) then
-        Desocultar(f, c + 1);
-  if EsPosicionValida(f, c - 1) then
-        Desocultar(f, c - 1);
-  if EsPosicionValida(f + 1, c + 1) then
-        Desocultar(f + 1, c + 1);
-  if EsPosicionValida(f - 1, c + 1) then
-        Desocultar(f - 1, c + 1);
-  if EsPosicionValida(f - 1, c - 1) then
-        Desocultar(f - 1, c - 1);
-  if EsPosicionValida(f + 1, c - 1) then
-        Desocultar(f + 1, c - 1);
+  for j := f - 1 to f + 1 do
+    for k := c - 1 to c + 1 do
+      if EsPosicionValida(j, k) and (t[j,k].tipo = Libre) then
+        Desocultar(j, k, t, libres);
 end;
 
 
@@ -150,7 +107,28 @@ no tienen minas alrededor, y así sucesivamente hasta que no queden más casilla
 adyacentes que cumplan con estas condiciones.
 }
 procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
-
+Var 
+    listaCelda, alias:   ListaPos;
+    m,n :   Integer;
+Begin
+  If t[f,c].tipo = Libre Then
+    Begin
+      New(listaCelda);
+      listaCelda^.pos.fila := f;
+      listaCelda^.pos.columna := c;
+      listaCelda^.sig := Nil;
+      Desocultar(f,c,t,listaCelda);
+      If t[f,c].minasAlrededor = 0 Then
+        Begin
+          alias := listaCelda;
+          While alias <> Nil Do
+            Begin
+              DesocultarAdyacentes(alias^.pos.fila,alias^.pos.columna,t,listaCelda);
+              alias := alias^.sig
+            End;
+        End;
+    End;
+End;
 
 {
 Devuelve true si no existe ninguna Casilla en el Tablero t que cumpla con estar 
@@ -158,13 +136,21 @@ oculta y ser Libre. En otro caso devuelve false.
 }
 function EsTableroCompleto(t : Tablero) : boolean;
 var completo : boolean;
+    i, j : integer;
 begin
   completo := true;
-  repeat
-    for i := 1 to CANT_FIL do
-      for j := 1 to CANT_COL do
-        if (t[i,j].oculto = true) and (t[i,j].tipo = Libre) then
-          completo := false;
-  until (completo = false) or (i = CANT_FIL and j = CANT_COL );
+  i := 1;
+  j := 1;
+  while (j <= CANT_COL) and (completo = true) do
+    begin
+      if(t[i,j].tipo = Libre) and (t[i,j].oculto = true) then
+        completo := false;
+      i := i + 1;
+      if(i > CANT_FIL) then
+        begin
+          i:= 1;
+          j:= j +1;
+        end;
+    end;
   EsTableroCompleto := completo;
 end;
