@@ -37,10 +37,6 @@ type
                  tope   : 0 .. MAX_MIN
               end;
 
-  AdyasentesType = record
-                      elems :array [1 .. MAX_MIN] of Posicion;
-                      tope : 0 .. MAX_MIN;
-
 
   { Lista de posiciones. 
     Se utilizará para implementar el subprograma DesocultarDesde. }

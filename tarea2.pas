@@ -49,16 +49,16 @@ son minas.
 }
 procedure AgregarMinas (m : Minas; var t : Tablero);
 var i, fila, columna, j, k : integer;
-var adyasentesArr : AdyasentesType;
 begin
-    for i := 1 to m.tope do
-      fila := m.elems[i].fila;
-      columna = m.elems[i].columna;
-      t[fila, columna].tipo := Mina;
-          for j := fila - 1 to fila + 1 do
-            for k := columna - 1 to columna + 1 do
-              if EsPosicionValida(j, k) and (t[j,k].tipo = Libre) then
-                t[j,k].minasAlrededor := t[j,k].minasAlrededor + 1;
+  for i := 1 to m.tope do
+  begin
+    fila := m.elems[i].fila;
+    columna := m.elems[i].columna;
+    t[fila, columna].tipo := Mina;
+        for j := fila - 1 to fila + 1 do
+          for k := columna - 1 to columna + 1 do
+            if EsPosicionValida(j, k) and (t[j,k].tipo = Libre) then
+              t[j,k].minasAlrededor := t[j,k].minasAlrededor + 1;
   end;
 end;
 
@@ -107,9 +107,8 @@ no tienen minas alrededor, y así sucesivamente hasta que no queden más casilla
 adyacentes que cumplan con estas condiciones.
 }
 procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
-Var 
+var 
     listaCelda, alias:   ListaPos;
-    m,n :   Integer;
 Begin
   If t[f,c].tipo = Libre Then
     Begin
@@ -142,15 +141,15 @@ begin
   i := 1;
   j := 1;
   while (j <= CANT_COL) and (completo = true) do
-    begin
-      if(t[i,j].tipo = Libre) and (t[i,j].oculto = true) then
-        completo := false;
-      i := i + 1;
-      if(i > CANT_FIL) then
-        begin
-          i:= 1;
-          j:= j +1;
-        end;
-    end;
+  begin
+    if(t[i,j].tipo = Libre) and (t[i,j].oculto = true) then
+      completo := false;
+    i := i + 1;
+    if(i > CANT_FIL) then
+      begin
+        i:= 1;
+        j:= j +1;
+      end;
+  end;
   EsTableroCompleto := completo;
 end;
