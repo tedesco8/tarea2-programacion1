@@ -36,7 +36,7 @@ De lo contrario devuelve false.
 }
 function EsPosicionValida (f, c : integer) : boolean;
 begin
-  EsPosicionValida := ((f > 0) and (f < CANT_FIL)) and ((c > 0) and (c < CANT_COL));
+  EsPosicionValida := ((f > 0) and (f <= CANT_FIL)) and ((c > 0) and (c <= CANT_COL));
 end;
 
 {
@@ -101,7 +101,7 @@ end;
 {
 Desoculta (ver procedimiento Desocultar) la Casilla del Tablero t asociada a la 
 fila f y la columna c. Si esa casilla está libre y no tiene minas alrededor, 
-también se desocultan todas sus casillas adyacentes. Para las casillas adyacentes 
+también se desocultan todas sus casillads adyacentes. Para las casillas adyacentes 
 desocultadas se repite el mismo procedimiento de desocultar a sus adyacentes si 
 no tienen minas alrededor, y así sucesivamente hasta que no queden más casillas 
 adyacentes que cumplan con estas condiciones.
@@ -120,10 +120,12 @@ Begin
       If t[f,c].minasAlrededor = 0 Then
         Begin
           alias := listaCelda;
+          writeln(alias.pos.fila, alias.pos.columna);
           While alias <> Nil Do
             Begin
               DesocultarAdyacentes(alias^.pos.fila,alias^.pos.columna,t,listaCelda);
-              alias := alias^.sig
+              alias := alias^.sig;
+              write(alias.pos.fila, alias.pos.columna);
             End;
         End;
     End;
