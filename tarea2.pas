@@ -108,27 +108,30 @@ adyacentes que cumplan con estas condiciones.
 }
 procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
 var 
-    listaCelda, alias:   ListaPos;
+  listaCelda, alias:   ListaPos;
+  pos : Posicion;
 Begin
   If t[f,c].tipo = Libre Then
+  Begin
+    New(listaCelda);
+    pos.fila := f;
+    pos.columna := c;
+    
+    listaCelda^.pos := pos;
+    listaCelda^.sig := Nil;
+    
+    PrimeraPosicion(pos, listaCelda);
+    Desocultar(f,c,t,listaCelda);
+    If t[f,c].minasAlrededor = 0 Then
     Begin
-      New(listaCelda);
-      listaCelda^.pos.fila := f;
-      listaCelda^.pos.columna := c;
-      listaCelda^.sig := Nil;
-      Desocultar(f,c,t,listaCelda);
-      If t[f,c].minasAlrededor = 0 Then
-        Begin
-          alias := listaCelda;
-          writeln(alias.pos.fila, alias.pos.columna);
-          While alias <> Nil Do
-            Begin
-              DesocultarAdyacentes(alias^.pos.fila,alias^.pos.columna,t,listaCelda);
-              alias := alias^.sig;
-              write(alias.pos.fila, alias.pos.columna);
-            End;
-        End;
+      alias := listaCelda;
+      While alias <> Nil Do
+      Begin
+        DesocultarAdyacentes(alias^.pos.fila,alias^.pos.columna,t,listaCelda);
+        alias := alias^.sig;
+      End;
     End;
+  End;
 End;
 
 {
